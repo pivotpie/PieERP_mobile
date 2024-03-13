@@ -1,5 +1,5 @@
 import { BASE_URI } from "../data/constants";
-import * as axios from "axios";
+import axios from 'axios';
 
 export default async function uploadFile(fileUri, fileName, fileType, options) {
     const formData = new FormData();

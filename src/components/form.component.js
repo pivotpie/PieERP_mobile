@@ -50,7 +50,7 @@ export default function Form({ props }) {
                 />
             ))}
 
-            <Text>{JSON.stringify(errors)}</Text>
+            <Text>Errors: {JSON.stringify(errors)}</Text>
 
             <Button onPress={handleSubmit(onSubmit)}>Save</Button>
         </CenteredView>

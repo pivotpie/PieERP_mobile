@@ -1,4 +1,7 @@
-{
+const IS_DEV = process.env.APP_VARIANT === 'development';
+
+
+export default {
   "expo": {
     "name": "changemakers-rn",
     "slug": "changemakers-rn",
@@ -19,7 +22,8 @@
       "supportsTablet": true,
       "config": {
         "usesNonExemptEncryption": false
-      }
+      },
+      "bundleIdentifier": IS_DEV ? 'io.changemakers.dev' : 'io.frappe.changemakers',
     },
     "android": {
       "adaptiveIcon": {
@@ -37,7 +41,8 @@
       }
     },
     "plugins": [
-      "expo-build-properties"
+      "expo-build-properties",
+      "expo-secure-store"
     ]
   }
 }

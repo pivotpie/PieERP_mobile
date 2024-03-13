@@ -27,15 +27,21 @@ export const TodoScreen = () => {
 
   function fetchTodos() {
     setLoadingTodos(true);
-    db.getDocList("ToDo", { fields: ["name", "description"], orderBy: { field: "creation", order: "desc" } })
+    db.getDocList("ToDo", { fields: "*", orderBy: { field: "creation", order: "desc" } })
       .then((res) => {
         setTodos(res);
       })
       .catch(async (e) => {
-        // This needs to be handled better, at a common place (DONE)
-        if (e.httpStatus === 403) {
-          // refresh token
+        if (e.httpStatus === 403 || e.httpStatus === 401) {
           await refreshAccessTokenAsync();
+        } else {
+          console.error(e);
+          Toast.show({
+            type: "error",
+            position: 'top',
+            text1: 'Error',
+            text2: e.message
+          });
         }
       })
       .finally(() => {
