@@ -48,10 +48,11 @@ const AuthProvider = (props) => {
       token: () => accessToken,
     });
 
-
     try {
       const call = frappe.call();
-      const userInfo = await call.get("frappe.integrations.oauth2.openid_profile")
+      const userInfo = await call.get(
+        "frappe.integrations.oauth2.openid_profile"
+      );
       setUserInfo(userInfo);
     } catch (e) {
       if (e.httpStatus === 403) {
@@ -62,6 +63,14 @@ const AuthProvider = (props) => {
   };
 
   const logout = async () => {
+    await AuthSession.revokeAsync(
+      {
+        token: accessToken,
+      },
+      {
+        revocationEndpoint: `${BASE_URI}/api/method/frappe.integrations.oauth2.revoke_token`,
+      }
+    );
     await SecureStore.deleteItemAsync(SECURE_AUTH_STATE_KEY);
     setIsAuthenticated(false);
     setToken(null);
@@ -97,7 +106,9 @@ const AuthProvider = (props) => {
           token: () => accessToken,
         });
         const call = frappe.call();
-        const userInfo = await call.get("frappe.integrations.oauth2.openid_profile")
+        const userInfo = await call.get(
+          "frappe.integrations.oauth2.openid_profile"
+        );
         setUserInfo(userInfo);
       })
       .catch((err) => {
@@ -149,7 +160,7 @@ const AuthProvider = (props) => {
                 console.error(err);
               });
           } else {
-            console.log("Not authenticated")
+            console.log("Not authenticated");
           }
         }
       })
@@ -160,7 +171,7 @@ const AuthProvider = (props) => {
     if (accessToken) {
       fetchUserInfo();
     }
-  }, [accessToken])
+  }, [accessToken]);
 
   return (
     <AuthContext.Provider
@@ -173,7 +184,7 @@ const AuthProvider = (props) => {
         promptAsync,
         logout,
         refreshAccessTokenAsync,
-        fetchUserInfo
+        fetchUserInfo,
       }}
     >
       {props.children}
